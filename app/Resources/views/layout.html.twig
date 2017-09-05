@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <style type="text/css">
+        table.product {
+            padding: 5px;
+            padding-right: 20px;
+            border: solid 1px #222222;
+
+        }
+        td {
+            padding: 10px; /* Поля в ячейках */
+        }
+        a.button {
+             -webkit-appearance: button;
+             -moz-appearance: button;
+
+             text-decoration: none;
+             color: initial;
+         }
+    </style>
+</head>
+<body>
+<div>
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+        <a href="{{ path('ProductsPage') }}" class="button">{{ 'Products' }}</a>
+
+        {% if not is_granted("ROLE_ADMIN") %}
+            <a href="{{ path('fos_user_profile_show') }}" class="button">{{ 'Profile' }}</a>
+        {% endif %}
+        <a href="{{ path('fos_user_security_logout') }}" class="button">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+    {% else %}
+        <a href="{{ path('fos_user_security_login') }}" class="button">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+        <a href="/register" class="button">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
+    {% endif %}
+</div>
+
+{% for type, messages in app.session.flashBag.all %}
+    {% for message in messages %}
+        <div class="{{ type }}">
+            {{ message|trans({}, 'FOSUserBundle') }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+<div>
+    {% block fos_user_content %}
+    {% endblock fos_user_content %}
+</div>
+</body>
+</html>

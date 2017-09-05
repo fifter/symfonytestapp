@@ -1,0 +1,85 @@
+{% extends "layout.html.twig" %}
+
+{% block fos_user_content %}
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <p>Админ</p>
+
+            <table class="product" >
+                <tr>
+                    <form action="{{ path("ProductsPage") }}" method="post">
+                        <p>
+                            Поиск по названию
+                            <input name="name" value={{ name_filter }}>
+                            <button>Поиск</button>
+                        </p>
+                        <input type="hidden" name="current_sort_type" value="{{ sort_type }}">
+                        <td><button name="sort" value="name">Название</button></td>
+                        <td><button name="sort" value="thumbnail">Краткое описание</button></td>
+                        <td><button name="sort" value="image">Изображение</button></td>
+                        <td><button name="sort" value="description">Полное описание</button></td>
+                        <td><button name="sort" value="price">Цена</button></td>
+                        <td><button name="sort" value="user">Пользователь</button></td>
+                        <td></td>
+                        <td></td>
+                    </form>
+                </tr>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.thumbnail }}</td>
+                        <td><img src="images/{{  product.image ? product.image : 'default.jpg' }}" width="400" height="400"></td>
+                        <td>{{ product.description }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>{{ product.user.username }} ({{ product.user.email }})</td>
+                        <td><form action="/products/update/{{ product.id }}">
+                                <p><input type="submit" value="Обновить"></p>
+                            </form></td>
+                        <td><form action="{{ path('DeleteProduct') }}" method="post">
+                                <input name="product_id" type="hidden" value="{{ product.id }}">
+                                <p><input type="submit" value="Удалить"></p>
+                            </form></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <br><a href="{{ path('AddProduct') }}" class="button">{{ 'Добавить продукт' }}</a>
+            <p>Не админ</p>
+            <table class="product">
+                <tr>
+                    <form action="{{ path("ProductsPage") }}" method="post">
+                        <p>
+                            Поиск по названию
+                            <input name="name" value={{ name_filter }}>
+                            <button>Поиск</button>
+                        </p>
+                        <input type="hidden" name="current_sort_type" value="{{ sort_type }}">
+                        <td><button name="sort" value="name">Название</button></td>
+                        <td><button name="sort" value="thumbnail">Краткое описание</button></td>
+                        <td><button name="sort" value="image">Изображение</button></td>
+                        <td><button name="sort" value="description">Полное описание</button></td>
+                        <td><button name="sort" value="price">Цена</button></td>
+                        <td></td>
+                        <td></td>
+                    </form>
+                </tr>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.thumbnail }}</td>
+                        <td><img src="images/{{ product.image ? product.image : 'default.jpg'}}" width="400" height="400"></td>
+                        <td>{{ product.description }}</td>
+                        <td>{{ product.price }}</td>
+                        <td><form action="/products/update/{{ product.id }}">
+                                <p><input type="submit" value="Обновить"></p>
+                            </form></td>
+                        <td><form action="{{ path('DeleteProduct') }}" method="post">
+                                <input name="product_id" type="hidden" value="{{ product.id }}">
+                                <p><input type="submit" value="Удалить"></p>
+                            </form></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    {% endif %}
+{% endblock fos_user_content %}

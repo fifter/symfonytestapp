@@ -1,0 +1,20 @@
+{% extends "layout.html.twig" %}
+
+{% block fos_user_content %}
+    <br>
+    {% if (action == 'AddProduct') %}
+        <form action="{{ path('AddProduct') }}" {{ form_enctype(form) }} method="POST" class="add_product">
+            {{ form_widget(form) }}
+            <div>
+                <input type="submit" value="{{ 'Добавить продукт' }}" />
+            </div>
+         </form>
+    {% elseif (action == 'UpdateProduct') %}
+        <form action="/products/update/{{ id }}" {{ form_enctype(form) }} method="POST" class="add_product">
+            {{ form_widget(form) }}
+            <div>
+                <input type="submit" value="{{ 'Обновить продукт' }}" />
+            </div>
+        </form>
+    {% endif %}
+{% endblock fos_user_content %}

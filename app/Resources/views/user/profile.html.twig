@@ -1,0 +1,11 @@
+{% extends "layout.html.twig" %}
+
+{% block fos_user_content %}
+    <div class="fos_user_user_show">
+        <p>{{ 'profile.show.username'|trans({}, 'FOSUserBundle') }}: {{ user.username }}</p>
+        <p>{{ 'profile.show.email'|trans({}, 'FOSUserBundle') }}: {{ user.email }}</p>
+    </div>
+    <a href="{{ path('fos_user_profile_edit') }}" class="button">{{ 'Изменить имя или мэйл' }}</a>
+    <a href="{{ path('fos_user_change_password') }}" class="button">{{ 'Изменить пароль' }}</a>
+
+{% endblock fos_user_content %}
